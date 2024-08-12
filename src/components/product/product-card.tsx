@@ -18,7 +18,8 @@ const ProductCard = ({ product, innerRef, ...props }: ProductCardProps) => {
       </div>
       <div className=" text-center font-semibold">
         <p>{product.title}</p>
-        <p className="text-center text-yellow-500 font-semibold">$ {product.price}</p>
+        <p className="text-center  font-semibold">⭐ {product.rating || 5}</p>
+        <p className="text-center text-xl text-yellow-500 font-semibold">$ {product.price.toLocaleString()}</p>
       </div>
     </div>
   )

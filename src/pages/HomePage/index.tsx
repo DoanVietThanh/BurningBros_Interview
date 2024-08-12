@@ -1,8 +1,10 @@
 import { getProductSearch } from "@/actions/get-product-search"
 import ComponentLoading from "@/components/loading"
 import ProductCard from "@/components/product/product-card"
+import ScrollToTop from "@/components/scrollToTop-button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { searchDebounceDeplay } from "@/constants"
 import { Product, ProductLists } from "@/types/product.type"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useDebounce } from "@uidotdev/usehooks"
@@ -11,13 +13,17 @@ import { useInView } from "react-intersection-observer"
 
 function HomePage() {
   const [searchValue, setSearchValue] = useState("")
-  const debouncedSearchValue = useDebounce(searchValue, 500) // 500ms debounce delay
+  const debouncedSearchValue = useDebounce(searchValue, searchDebounceDeplay)
   const { ref, inView } = useInView({
     threshold: 0,
   })
 
   const fetchProducts = async ({ pageParam = 0 }: { pageParam: number }) => {
     return getProductSearch({ searchValue: debouncedSearchValue, pageParam })
+  }
+
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value)
   }
 
   const { data, status, hasNextPage, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
@@ -42,10 +48,6 @@ function HomePage() {
       )
     })
   )
-
-  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value)
-  }
 
   useEffect(() => {
     if (inView && hasNextPage) {
@@ -74,6 +76,7 @@ function HomePage() {
       )}
       <div className="grid lg:grid-cols-4 md:grid-cols-3 gap-8 mt-8">{content}</div>
       {isFetchingNextPage && <ComponentLoading />}
+      <ScrollToTop />
     </div>
   )
 }

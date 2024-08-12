@@ -1,3 +1,4 @@
+import { User2 } from "lucide-react"
 import Logo from "/logo.svg"
 
 const Header = () => {
@@ -7,7 +8,9 @@ const Header = () => {
         <div className="">
           <img src={Logo} alt="Logo" />
         </div>
-        <div className="text-xl capitalize">admin</div>
+        <div className="flex items-center gap-2 text-2xl capitalize">
+          <User2 /> User
+        </div>
       </div>
     </div>
   )
